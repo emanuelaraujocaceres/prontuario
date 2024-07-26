@@ -84,4 +84,19 @@ document.addEventListener('DOMContentLoaded', () => {
             displayPatients();
         }
     }
+    // Função para adicionar um novo paciente no topo da lista
+function addPatient(name) {
+    const list = document.getElementById('patientList');
+    const newItem = document.createElement('li');
+    newItem.className = 'patient-item';
+    newItem.dataset.id = Date.now(); // Utiliza timestamp como ID único
+    newItem.textContent = name;
+
+    // Adiciona o novo item no início da lista
+    list.insertBefore(newItem, list.firstChild);
+}
+
+// Exemplo de como adicionar um paciente (deve ser chamado quando necessário)
+addPatient('Novo Paciente');
+
 });
