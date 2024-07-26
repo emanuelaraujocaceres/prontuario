@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const age = document.getElementById('age').value;
             const gender = document.getElementById('gender').value;
             const medicalHistory = document.getElementById('medicalHistory').value;
-            const id = Date.now();
+            const id = Date.now(); // Gera um ID único baseado no timestamp
 
             const patient = { id, name, age, gender, medicalHistory };
 
@@ -20,11 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             alert('Paciente cadastrado com sucesso!');
             form.reset();
+            displayPatients(); // Atualiza a lista de pacientes após adicionar um novo
         });
     }
 
     if (patientList) {
-        displayPatients();
+        displayPatients(); // Exibe a lista de pacientes ao carregar a página
     }
 
     function displayPatients() {
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             li.innerHTML = `
                 Prontuário: ${patient.id}, Nome: ${patient.name}, Idade: ${patient.age}, Gênero: ${patient.gender}, Histórico Médico: ${patient.medicalHistory}
                 <button onclick="editPatient(${patient.id})">Editar</button>
-                <button onclick="deletePatient(${patient.id})">Excluir</button>
+                <button onclick="confirmDelete(${patient.id})">Excluir</button>
             `;
             patientList.appendChild(li);
         });
@@ -51,11 +52,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 li.innerHTML = `
                     Prontuário: ${patient.id}, Nome: ${patient.name}, Idade: ${patient.age}, Gênero: ${patient.gender}, Histórico Médico: ${patient.medicalHistory}
                     <button onclick="editPatient(${patient.id})">Editar</button>
-                    <button onclick="deletePatient(${patient.id})">Excluir</button>
+                    <button onclick="confirmDelete(${patient.id})">Excluir</button>
                 `;
                 patientList.appendChild(li);
             }
         });
+    }
+
+    window.confirmDelete = function(id) {
+        const password = prompt('Digite a senha para excluir o paciente:');
+        if (password === 'senha123') {
+            deletePatient(id);
+        } else {
+            alert('Senha incorreta.');
+        }
     }
 
     window.deletePatient = function(id) {
@@ -66,37 +76,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     window.editPatient = function(id) {
-        let patients = localStorage.getItem('patients') ? JSON.parse(localStorage.getItem('patients')) : [];
-        const patient = patients.find(patient => patient.id === id);
+        const password = prompt('Digite a senha para editar o paciente:');
+        if (password === 'senha123') {
+            let patients = localStorage.getItem('patients') ? JSON.parse(localStorage.getItem('patients')) : [];
+            const patient = patients.find(patient => patient.id === id);
 
-        if (patient) {
-            const name = prompt('Nome:', patient.name);
-            const age = prompt('Idade:', patient.age);
-            const gender = prompt('Gênero:', patient.gender);
-            const medicalHistory = prompt('Histórico Médico:', patient.medicalHistory);
+            if (patient) {
+                const name = prompt('Nome:', patient.name);
+                const age = prompt('Idade:', patient.age);
+                const gender = prompt('Gênero:', patient.gender);
+                const medicalHistory = prompt('Histórico Médico:', patient.medicalHistory);
 
-            patient.name = name || patient.name;
-            patient.age = age || patient.age;
-            patient.gender = gender || patient.gender;
-            patient.medicalHistory = medicalHistory || patient.medicalHistory;
+                patient.name = name || patient.name;
+                patient.age = age || patient.age;
+                patient.gender = gender || patient.gender;
+                patient.medicalHistory = medicalHistory || patient.medicalHistory;
 
-            localStorage.setItem('patients', JSON.stringify(patients));
-            displayPatients();
+                localStorage.setItem('patients', JSON.stringify(patients));
+                displayPatients();
+            }
+        } else {
+            alert('Senha incorreta.');
         }
     }
-    // Função para adicionar um novo paciente no topo da lista
-function addPatient(name) {
-    const list = document.getElementById('patientList');
-    const newItem = document.createElement('li');
-    newItem.className = 'patient-item';
-    newItem.dataset.id = Date.now(); // Utiliza timestamp como ID único
-    newItem.textContent = name;
-
-    // Adiciona o novo item no início da lista
-    list.insertBefore(newItem, list.firstChild);
-}
-
-// Exemplo de como adicionar um paciente (deve ser chamado quando necessário)
-addPatient('Novo Paciente');
-
 });
