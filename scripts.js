@@ -59,44 +59,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    window.confirmDelete = function(id) {
-        const password = prompt('Digite a senha para excluir o paciente:');
-        if (password === 'senha123') {
-            deletePatient(id);
-        } else {
-            alert('Senha incorreta.');
-        }
-    }
-
-    window.deletePatient = function(id) {
-        let patients = localStorage.getItem('patients') ? JSON.parse(localStorage.getItem('patients')) : [];
-        patients = patients.filter(patient => patient.id !== id);
-        localStorage.setItem('patients', JSON.stringify(patients));
-        displayPatients();
-    }
-
-    window.editPatient = function(id) {
-        const password = prompt('Digite a senha para editar o paciente:');
-        if (password === 'senha123') {
-            let patients = localStorage.getItem('patients') ? JSON.parse(localStorage.getItem('patients')) : [];
-            const patient = patients.find(patient => patient.id === id);
-
-            if (patient) {
-                const name = prompt('Nome:', patient.name);
-                const age = prompt('Idade:', patient.age);
-                const gender = prompt('Gênero:', patient.gender);
-                const medicalHistory = prompt('Histórico Médico:', patient.medicalHistory);
-
-                patient.name = name || patient.name;
-                patient.age = age || patient.age;
-                patient.gender = gender || patient.gender;
-                patient.medicalHistory = medicalHistory || patient.medicalHistory;
-
-                localStorage.setItem('patients', JSON.stringify(patients));
-                displayPatients();
-            }
-        } else {
-            alert('Senha incorreta.');
-        }
-    }
 });
